@@ -1,0 +1,52 @@
+<%- include('../includes/head.ejs') %>
+    <!-- Style Sheets -->
+    <link rel="stylesheet" href="/assets/css/fonts.css">
+    <link rel="stylesheet" href="/assets/css/main.css">
+</head>
+<body class="auth">
+    <div class="form">
+        <% if(login && reason) { %>
+            <div class="show_message error">
+                <p><%= reason %></p>
+            </div>
+        <% } %>
+        <div class="input-control">
+            <label for="user_name">User Name</label>
+            <input type="text" name="user_name">
+        </div>
+        <% if(!login) { %> 
+            <div class="input-control">
+                <label for="full_name">Full Name</label>
+                <input type="text" name="full_name">
+            </div>
+            <div class="input-control">
+                <label for="email">Email</label>
+                <input type="email" name="email">
+            </div>
+        <% } %>
+        <div class="input-control">
+            <label for="password">Password</label>
+            <input type="password" name="password">
+        </div>
+        <% if(!login) { %> 
+            <div class="input-control">
+                <label for="confirm_password">Confirm Password</label>
+                <input type="password" name="confirm_password">
+            </div>
+        <% } %>
+        <div class="actions">
+            <div class="submit">
+                <button type="submit" data-type="<%= login ? 'login' : 'signup' %>"><%= login ? 'Login' : 'SignUp' %></button>
+            </div>
+        </div>
+        <div class="extras">
+            <div class="switchAuth">
+                <p><%= login ? 'No account? Create one.' : 'Already Registered?' %></p>
+                <a href="/auth/<%= !login ? 'login' : 'signup' %>"><%= !login ? 'Login' : 'SignUp' %></a>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="/assets/js/auth.bundle.js"></script>
+</body>
+</html>

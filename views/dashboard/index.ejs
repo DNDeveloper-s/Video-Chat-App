@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Chat App</title>
+
+    <!-- Style Sheets -->
+    <link rel="stylesheet" href="/assets/css/fonts.css">
+    <link rel="stylesheet" href="/assets/css/main.css">
+</head>
+<body>
+    
+    <div class="wrapper">
+        <div class="peer_id">Your id</div>
+        <div class="video_container">
+            <div class="video_holder">
+                <video id="rVideo" autoplay="autoplay"></video>
+            </div>
+            
+            <div class="video_holder">
+                <video id="lVideo" autoplay="autoplay" muted></video>
+            </div>
+            
+            <div class="video_holder">
+                <video id="bVideo" autoplay="autoplay"></video>
+            </div>
+            
+            <div class="video_holder">
+                <video id="cVideo" autoplay="autoplay"></video>
+            </div>
+        </div>
+    
+        <div class="actions">
+            <div class="input-control">
+                <input id="connId" type="text" placeholder="Enter connection peer id" name="" id="other_peer_id">
+            </div>
+            <div class="input-control">
+                <button id="screenBtn" class="red">Share Screen</button>
+            </div>
+            <div class="input-control">
+                <button id="cameraBtn" class="red">Share Camera</button>
+            </div>
+            <div class="input-control">
+                <button id="connBtn" class="red">Connect</button>
+            </div>
+            <div class="input-control">
+                <button id="callBtn" class="blue">Call</button>
+            </div>
+        </div>
+    </div>
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/peerjs@0.3.20/dist/peer.min.js"></script>
+    <script src="/assets/js/dashboard.bundle.js"></script>
+    <!-- <script src="/js/app1.js"></script> -->
+</body>
+</html>
