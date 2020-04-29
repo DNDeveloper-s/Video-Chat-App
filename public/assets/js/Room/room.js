@@ -2,11 +2,21 @@ const media = require('./Peer Connections/Media/getMedia');
 const getPeers = require('./Server/getPeers');
 const utils = require('../utilities');
 
+// Some room imports
+const roomSettings = require('./Client/roomSettings');
+
 // Initializing WebSockets
 require('../Sockets/socket')();
 
 // Storing roomid as global variable
 window.roomId = document.body.dataset.roomid;
+
+// Initializing some room user actions 
+// 1. Individual User actions
+roomSettings.initIndividualUserActionBtns();
+
+
+// roomSettings.initCloseCamera();
 
 (async function () {
     // Fetch Peers

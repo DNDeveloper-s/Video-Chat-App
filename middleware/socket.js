@@ -37,8 +37,8 @@ module.exports.s = async (req, res, next) => {
             //     user.connectedDetails.roomId = undefined;
             // }
             
-            user.connectedDetails.socketId = undefined;
-            await user.save();
+            // user.connectedDetails.socketId = undefined;
+            // await user.save();
         })
     })
 

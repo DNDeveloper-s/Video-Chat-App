@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const { ExpressPeerServer } = require('peer');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoDbStore = require('connect-mongodb-session')(session);
@@ -25,6 +26,9 @@ const authRoutes = require('./routes/authRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
 const roomRoutes = require('./routes/roomRoutes');
 
+// Middlewares
+const auth = require('./middleware/isAuth');
+
 
 // View Engines
 app.set('view engine', 'ejs');
@@ -47,6 +51,15 @@ app.use(session({
     }
 }));
 
+// 404 Not Found Page!
+app.get('/', (req, res, next) => {
+    if(req.session && req.session.isLoggedIn) {
+        return res.redirect('/dashboard/home');
+    }
+    return res.redirect('/auth/login');
+})
+
+
 // Custom Routes
 app.use('/auth', authRoutes);
 app.use('/dashboard', dashboardRoutes);
@@ -55,7 +68,7 @@ app.use('/room', roomRoutes);
 
 // 404 Not Found Page!
 app.use('/', (req, res, next) => {
-    res.send('404 not found!');
+    res.render('404')
 })
 
 // Special Middleware Function to handle errors 
@@ -82,6 +95,13 @@ mongoose.connect(MONGODB_URI, {useNewUrlParser: true, useUnifiedTopology: true }
             pingTimeout: 5000,
             pingInterval: 10000
         });
+
+        const peerServer = ExpressPeerServer(server, {
+            debug: true,
+            path: '/myapp'
+        });
+
+        app.use('/peerjs', peerServer);
 
         app.set('socket.io', io);
         console.log(`Server started on ${process.env.PORT}`);

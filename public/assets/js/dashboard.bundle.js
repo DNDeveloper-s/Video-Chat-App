@@ -705,6 +705,17 @@ eval("const homeUI = __webpack_require__(/*! ./Client/homeUI */ \"./public/asset
 
 /***/ }),
 
+/***/ "./public/assets/js/Room/Server/getPeers.js":
+/*!**************************************************!*\
+  !*** ./public/assets/js/Room/Server/getPeers.js ***!
+  \**************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("module.exports = async () => {\r\n    const res = await fetch(`${window.location.origin}/room/getPeers?roomId=${roomId}`, {\r\n        method: 'GET'\r\n    });\r\n\r\n    return res.json();\r\n}\n\n//# sourceURL=webpack:///./public/assets/js/Room/Server/getPeers.js?");
+
+/***/ }),
+
 /***/ "./public/assets/js/Sockets/socket.js":
 /*!********************************************!*\
   !*** ./public/assets/js/Sockets/socket.js ***!
@@ -712,7 +723,7 @@ eval("const homeUI = __webpack_require__(/*! ./Client/homeUI */ \"./public/asset
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("// const {recStream} = require('../Media/gettingMedia');\r\nconst homeUI = __webpack_require__(/*! ../Dashboard/Home/Client/homeUI */ \"./public/assets/js/Dashboard/Home/Client/homeUI.js\");\r\n\r\nmodule.exports = () => {\r\n    console.log('Coming!');\r\n    const io = __webpack_require__(/*! socket.io-client */ \"./node_modules/socket.io-client/lib/index.js\");\r\n\r\n    window.nsSocket = io(`${window.location.origin}`, {transports: ['websocket'], upgrade: false})\r\n\r\n    nsSocket.on('haha', function(socket) {\r\n        console.log('Connected to ' + socket.id);\r\n    })\r\n\r\n    nsSocket.on('createRoomUpdate', function(data) {\r\n        homeUI.createRoomUpdateToUI(data.message);\r\n    })\r\n}\n\n//# sourceURL=webpack:///./public/assets/js/Sockets/socket.js?");
+eval("// const {recStream} = require('../Media/gettingMedia');\r\nconst homeUI = __webpack_require__(/*! ../Dashboard/Home/Client/homeUI */ \"./public/assets/js/Dashboard/Home/Client/homeUI.js\");\r\nconst roomSettings = __webpack_require__(/*! ../utilities */ \"./public/assets/js/utilities.js\");\r\n\r\nmodule.exports = () => {\r\n    console.log('Coming!');\r\n    const io = __webpack_require__(/*! socket.io-client */ \"./node_modules/socket.io-client/lib/index.js\");\r\n\r\n    window.nsSocket = io(`${window.location.origin}`)\r\n\r\n    nsSocket.on('haha', function(socket) {\r\n        console.log('Connected to ' + socket.id);\r\n    })\r\n\r\n    nsSocket.on('createRoomUpdate', function(data) {\r\n        homeUI.createRoomUpdateToUI(data.message);\r\n    })\r\n\r\n    nsSocket.on('peer', function(data) {\r\n        console.log('peer socket event');\r\n        if(data.type === 'newPeerAdded') {\r\n            roomSettings.fetchPeersToSS();\r\n        }\r\n    })\r\n}\n\n//# sourceURL=webpack:///./public/assets/js/Sockets/socket.js?");
 
 /***/ }),
 
@@ -724,6 +735,17 @@ eval("// const {recStream} = require('../Media/gettingMedia');\r\nconst homeUI =
 /***/ (function(module, exports, __webpack_require__) {
 
 eval("// Initializing WebSockets\r\n__webpack_require__(/*! ./Sockets/socket */ \"./public/assets/js/Sockets/socket.js\")();\r\n\r\n// Initializing Room\r\n__webpack_require__(/*! ./Dashboard/Home/home */ \"./public/assets/js/Dashboard/Home/home.js\")();\r\n\r\n\r\n// // import Peer from 'peerjs';\r\n\r\n// import {getUserMedia, recStream} from './Media/gettingMedia';\r\n\r\n// const id = Math.ceil(Math.random() * 2000) + 1826381723;\r\n\r\n// require('./Sockets/socket')();\r\n\r\n// let peer = null;\r\n\r\n// window.peer = peer = new Peer({\r\n//     key: 'lwjd5qra8257b9'\r\n// });\r\n\r\n// let conn;\r\n\r\n// let peer_id;\r\n\r\n\r\n// console.log(peer);\r\n\r\n\r\n// peer.on('open', function(id) {\r\n//     document.querySelector('.peer_id').innerHTML = peer.id;\r\n// });\r\n\r\n\r\n// peer.on('connection', function(connection) {\r\n//     conn = connection;\r\n//     peer_id = connection.peer;\r\n\r\n//     document.querySelector('#connId').value = peer_id;\r\n\r\n//     console.log('Connected');\r\n// });\r\n\r\n// document.getElementById('connBtn').addEventListener('click', function() {\r\n//     peer_id = document.querySelector('#connId').value;\r\n\r\n//     if(peer_id) {\r\n//         conn = peer.connect(peer_id);\r\n//     } else {\r\n//         alert('Enter peer id!')\r\n//         return false;\r\n//     }\r\n// })\r\n\r\n// peer.on('call', function(call) {\r\n//     const acceptCall = confirm('Do you want to accept the call?');\r\n\r\n//     if(acceptCall) {\r\n//         call.answer(window.localStream);\r\n\r\n//         call.on('stream', function (stream){\r\n//             window.peer_stream = stream;\r\n\r\n//             recStream(stream, 'rVideo');\r\n\r\n//             peer.on('change', function(data) {\r\n//                 window.peer_stream = data.stream;\r\n//                 recStream(data.stream, 'rVideo');\r\n//             })\r\n//         })\r\n\r\n//         call.on('close', function () {\r\n//             alert('Call has been ended!');\r\n//         })\r\n//     } else {\r\n//         console.log('Call has been declined');\r\n//     }\r\n// })\r\n\r\n// document.getElementById('callBtn').addEventListener('click', function() {\r\n//     console.log('Calling a peer!');\r\n//     console.log(peer);\r\n\r\n//     const call = peer.call(peer_id, window.localStream);\r\n\r\n//     call.on('stream', function(stream) {\r\n//         window.peer_stream = stream;\r\n\r\n//         recStream(stream, 'rVideo');\r\n//     })\r\n// })\r\n\r\n// // conn.on('open', function() {\r\n// //     // Receive messages\r\n// //     conn.on('data', function(data) {\r\n// //       console.log('Received', data);\r\n// //     });\r\n  \r\n// //     // Send messages\r\n// //     conn.send('Hello!');\r\n// // });\r\n\r\n\r\n// getUserMedia();\r\n\r\n\r\n\n\n//# sourceURL=webpack:///./public/assets/js/dashboard.js?");
+
+/***/ }),
+
+/***/ "./public/assets/js/utilities.js":
+/*!***************************************!*\
+  !*** ./public/assets/js/utilities.js ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("function waitAMin(time = Number /** In milliseconds  */) {\r\n    return new Promise((res, rej) => {\r\n        setTimeout(() => {\r\n            res();\r\n        }, time);\r\n    })\r\n}\r\n\r\nasync function fetchPeersToSS() {\r\n    const data = await __webpack_require__(/*! ./Room/Server/getPeers */ \"./public/assets/js/Room/Server/getPeers.js\")();\r\n\r\n    console.log(data);\r\n\r\n    sessionStorage.setItem('current_peers', JSON.stringify(data.acknowledgement.peerObj));\r\n}\r\n\r\nfunction fetchPeersFromSS() {\r\n    const jsonPeers = sessionStorage.getItem('current_peers');\r\n    console.log(jsonPeers);\r\n    const peerObj = JSON.parse(jsonPeers);\r\n    return peerObj;\r\n}\r\n\r\nasync function fetchCurrentUser() {\r\n    const res = await fetch(`${window.location.origin}/room/fetch?details=curUser`, {\r\n        method: 'GET'\r\n    });\r\n\r\n    return res.json();\r\n}\r\n\r\nfunction pauseVideo(videoEl) {\r\n    const video = document.querySelector(videoEl);\r\n    const videoHolder = video.parentElement;\r\n\r\n    // Creating new canvas element\r\n    const canvasEl = document.createElement('canvas');\r\n    videoHolder.append(canvasEl);\r\n\r\n    // Grabbing some canvas stuff, el and context\r\n    const canvas = videoHolder.querySelector('canvas');\r\n    const context = canvas.getContext('2d');\r\n\r\n    // some global variables\r\n    let myWidth, myHeight, ratio;\r\n    \r\n    // Event handler on the video element\r\n    video.addEventListener('loadedmetadata', function() {\r\n        ratio = video.videoWidth/video.videoHeight;\r\n        myWidth = video.videoWidth-100;\r\n        myHeight = parseInt(myWidth/ratio,10);\r\n        canvas.width = myWidth;\r\n        canvas.height = myHeight;\r\n\r\n        // Put it all together\r\n        context.fillRect(0,0,myWidth,myHeight);\r\n        context.drawImage(video,0,0,myWidth,myHeight);\r\n\r\n        // Video is paused, Lets add some utiility classes on video parent element\r\n        videoHolder.classList.add('videoPaused');\r\n    },false);\r\n\r\n}\r\n\r\nmodule.exports = {\r\n    waitAMin,\r\n    fetchPeersToSS,\r\n    fetchPeersFromSS,\r\n    fetchCurrentUser,\r\n    pauseVideo\r\n}\n\n//# sourceURL=webpack:///./public/assets/js/utilities.js?");
 
 /***/ }),
 

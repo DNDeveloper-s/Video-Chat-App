@@ -55,12 +55,19 @@ body.auth {
 }
 
 .wrapper > .video_container > .video_holder {
+  position: relative;
   width: auto;
   height: auto;
   border: 1px solid rgba(182, 181, 181, 0.911);
   -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
           box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   margin: 10px;
+}
+
+.wrapper > .video_container > .video_holder:hover > .actions {
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
 }
 
 .wrapper > .video_container > .video_holder > video {
@@ -74,6 +81,107 @@ body.auth {
     max-width: 100%;
     height: auto;
   }
+}
+
+.wrapper > .video_container > .video_holder > canvas {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.wrapper > .video_container > .video_holder.videoPaused::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 2;
+}
+
+.wrapper > .video_container > .video_holder.videoPaused > .svg_container {
+  pointer-events: auto;
+  opacity: 1;
+  visibility: visible;
+}
+
+.wrapper > .video_container > .video_holder > .actions {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  background: rgba(0, 0, 0, 0.308);
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  -webkit-transition: .2s ease-in-out;
+  transition: .2s ease-in-out;
+  z-index: 10;
+}
+
+.wrapper > .video_container > .video_holder > .actions > *:last-child {
+  margin-left: 25px;
+}
+
+.wrapper > .video_container > .video_holder > .actions > *.active > .svg_container > svg {
+  fill: #b33535;
+  cursor: pointer;
+}
+
+.wrapper > .video_container > .video_holder > .actions > * > .svg_container {
+  width: 40px;
+  height: 40px;
+}
+
+.wrapper > .video_container > .video_holder > .actions > * > .svg_container:hover > svg {
+  fill: #b33535;
+  cursor: pointer;
+}
+
+.wrapper > .video_container > .video_holder > .actions > * > .svg_container > svg {
+  width: 100%;
+  height: 100%;
+  fill: lightgrey;
+  -webkit-transition: .15s ease-in-out;
+  transition: .15s ease-in-out;
+}
+
+.wrapper > .video_container > .video_holder > .svg_container {
+  width: 40%;
+  height: 40%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0;
+  -webkit-transition: .2s ease-in-out;
+  transition: .2s ease-in-out;
+  visibility: hidden;
+}
+
+.wrapper > .video_container > .video_holder > .svg_container > svg {
+  fill: lightgray;
+  width: 100%;
+  height: 100%;
 }
 
 .wrapper > .actions {

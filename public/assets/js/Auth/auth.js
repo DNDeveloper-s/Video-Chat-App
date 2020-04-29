@@ -50,9 +50,11 @@ authSettings.initEventListenerToInput(
                 
                 // Loading Home Page
                 if(data.acknowledgement.type === 'success') {
-                    const redirectUrl = window.location.search.split('&')[1].slice(11);
-                    if(redirectUrl) {
-                        window.location.replace(`${window.location.origin}${redirectUrl}`);
+                    const redirectUrl = window.location.search.split('&')[1];
+                    
+                    if(redirectUrl && redirectUrl.length > 0) {
+                        const refinedRedirectUrl = redirectUrl.slice(11);
+                        window.location.replace(`${window.location.origin}${refinedRedirectUrl}`);
                     } else {
                         homeSettings.loadHome();
                     }

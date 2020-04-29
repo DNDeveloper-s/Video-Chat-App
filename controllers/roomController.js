@@ -117,8 +117,12 @@ module.exports.postNewPeerId = async (req, res, next) => {
     const peerId = req.query.peerId;
     const roomId = req.query.roomId;
 
+    // Initiating WebSockets
+    const io = req.app.get('socket.io');
+
     // Fetching Room and User from database
-    const room = await Room.findOne({uniqueId: roomId});
+    const room = await Room.findOne({uniqueId: roomId})
+                .populate('members.user');
     const user = await User.findById(req.session.user._id);
 
     if(!room) {
@@ -131,7 +135,7 @@ module.exports.postNewPeerId = async (req, res, next) => {
         peerId: peerId
     };
 
-    let oldMember = room.members.filter(cur => cur.user.toString() === req.session.user._id.toString())[0];
+    let oldMember = room.members.filter(cur => cur.user._id.toString() === req.session.user._id.toString())[0];
 
     if(oldMember) {
         oldMember.peerId = peerId;
@@ -146,6 +150,13 @@ module.exports.postNewPeerId = async (req, res, next) => {
     user.connectedDetails.roomId = roomId;
 
     await user.save();
+
+    // room.members.forEach(member => {
+    //     console.log(member);
+    //     io.to(member.user.connectedDetails.socketId).emit('peer', {
+    //         type: 'newPeerAdded'
+    //     })
+    // })
 
     return res.json({
         acknowledgement: {
@@ -167,9 +178,24 @@ module.exports.fetchPeers = async (req, res, next) => {
         return next('Invalid Room Id');
     }
 
-    const peerObj = room.members.map(member => {
+    // const peerObj = room.members.map(member => {
+    //     if(member.user._id.toString() !== req.session.user._id.toString()) {
+    //         return {
+    //             user: {
+    //                 userName: member.user.userName,
+    //                 image: member.user.image,
+    //                 fullName: member.user.fullName,
+    //                 _id: member.user._id
+    //             },
+    //             peerId: member.peerId
+    //         }
+    //     }
+    //     return undefined;
+    // })
+
+    const peerObj = room.members.reduce((acc, member) => {
         if(member.user._id.toString() !== req.session.user._id.toString()) {
-            return {
+            return acc.concat({
                 user: {
                     userName: member.user.userName,
                     image: member.user.image,
@@ -177,10 +203,10 @@ module.exports.fetchPeers = async (req, res, next) => {
                     _id: member.user._id
                 },
                 peerId: member.peerId
-            }
+            });
         }
-        return undefined;
-    })
+        return acc;
+    }, []);
 
     return res.json({
         acknowledgement: {
@@ -206,7 +232,8 @@ module.exports.fetch = async(req, res, next) => {
                     fullName: req.session.user.fullName,
                     userName: req.session.user.userName,
                     image: req.session.user.image,
-                }
+                },
+                session: req.session
             }
         })
     }
